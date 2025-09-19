@@ -1,0 +1,45 @@
+:root {
+  /* Palette proche de #dec099 */
+  --sand-50: #f3e4cf;
+  --sand-100: #e9d3b6;
+  --sand-200: #dec099; /* ta couleur de base */
+  --sand-300: #d2aa78;
+  --sand-400: #c29157; /* plus chaud/foncé dans l’angle */
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  color: #111; /* texte noir quasi pur */
+  background-color: var(--sand-200); /* fallback solide */
+  background-image: radial-gradient(
+    circle at 100% 100%,
+    /* centre en bas à droite */ var(--sand-50) 0%,
+    var(--sand-100) 28%,
+    var(--sand-200) 55%,
+    var(--sand-300) 78%,
+    var(--sand-400) 100%
+  );
+  background-attachment: fixed; /* léger effet "wallpaper" au scroll */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+h1 {
+  font-family: "Tomorrow", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+h2 {
+  font-family: "Tomorrow", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}

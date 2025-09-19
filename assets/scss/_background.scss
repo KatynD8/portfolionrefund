@@ -1,0 +1,9 @@
+.background {
+  position: fixed; /* fixé en arrière-plan */
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* pour passer derrière le contenu */
+}

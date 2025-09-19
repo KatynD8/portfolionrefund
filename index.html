@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio - DECKORP</title>
+    <link rel="stylesheet" href="./assets/scss/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Tomorrow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header" id="hero-banner">
+      <div class="top-bar">
+        <h1>DECKORP</h1>
+        <h2>Web Developer</h2>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-content-left">
+          <h2>Decker T</h2>
+          <button class="btn">Mon travail</button>
+        </div>
+        <div class="hero-content-right">
+          <img src="./assets/img/heroblack.png" alt="" />
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN LAYOUT -->
+    <main class="layout">
+      <!-- LEFT COLUMN (Carte de visite) -->
+      <section class="content_left">
+        <div class="card">
+          <h2>KatynD8</h2>
+          <p>Email : <a href="mailto:tonmail@mail.com">tonmail@mail.com</a></p>
+          <p>
+            <a href="#">LinkedIn</a> | <a href="#">GitHub</a> |
+            <a href="#">Twitter</a>
+          </p>
+        </div>
+        <div class="card">
+          Ancien travailleur social devenu développeur web freelance, je code
+          avec le même enthousiasme que je regardais les films de
+          science-fiction quand j'étais gamin…
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN (Contenu principal) -->
+      <section class="content_right">
+        <!-- NAVBAR -->
+        <nav class="navbar" role="tablist" aria-label="Sections principales">
+          <button
+            class="tab btn"
+            data-target="projets"
+            role="tab"
+            aria-selected="true"
+          >
+            Projets
+          </button>
+          <button
+            class="tab btn"
+            data-target="jeu"
+            role="tab"
+            aria-selected="false"
+            tabindex="-1"
+          >
+            Jeu
+          </button>
+        </nav>
+
+        <!-- SECTIONS -->
+        <div class="tab-content" id="projets" role="tabpanel" tabindex="0">
+          <h2>Mes Projets</h2>
+          <div class="projects">
+            <div class="project-card">
+              <h3>My-Dashboard</h3>
+              <p>
+                Lassé de ne pas trouver d'outil qui me conviennent, je développe
+                mon propre dashboard nomade
+              </p>
+            </div>
+            <div class="project-card">
+              <h3>Game of Life</h3>
+              <p>Ma version du jeu de la vie</p>
+            </div>
+            <div class="project-card">
+              <h3>Passeur de mémoire</h3>
+              <p>La page web d'un artiste qui trvail autour du témoignage</p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="tab-content"
+          id="jeu"
+          role="tabpanel"
+          tabindex="0"
+          hidden
+          aria-hidden="true"
+        >
+          <h2>Section en travaux</h2>
+          <p>News in coming</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>© 2025 DECKORP. Tous droits réservés.</p>
+    </footer>
+    <canvas class="background"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.3/particles.min.js"></script>
+    <script src="./assets/js/main.js" defer></script>
+  </body>
+</html>

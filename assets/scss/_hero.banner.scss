@@ -1,0 +1,58 @@
+#hero-banner {
+  height: 95vh;
+  position: relative; // <- pour ancrer les enfants positionnés
+  border-bottom: 2px solid black;
+
+  .top-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    align-items: center; // centre verticalement les éléments de la barre
+    border-bottom: 2px solid black;
+  }
+
+  .hero-content-right {
+    position: absolute;
+    bottom: 0; // bas
+    right: 0; // droite
+    display: flex;
+    flex-direction: row;
+    width: 40vh;
+    transform: translateX(-40%);
+    .hero-content-left img {
+      width: 100%;
+    }
+  }
+
+  .hero-content-left {
+    display: flex;
+    flex-direction: column;
+    width: 60vh;
+    height: 100%;
+    align-items: center;
+    padding-top: 40vh;
+    font-size: 50px;
+
+    /* Hover/active/focus pour un rendu premium */
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    /* Accessibilité focus visible */
+    .btn:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.9);
+      outline-offset: 3px;
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+  }
+}

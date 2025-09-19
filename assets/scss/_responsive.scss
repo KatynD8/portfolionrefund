@@ -1,0 +1,12 @@
+/* Responsif */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    order: 2; /* optionnel : passer la bio sous le contenu */
+  }
+  .content {
+    order: 1;
+  }
+}
