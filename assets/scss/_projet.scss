@@ -1,0 +1,128 @@
+// =========================
+// Variables
+// =========================
+$gap: 16px;
+$radius: 14px;
+$shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.125);
+$shadow-card: 0 6px 24px rgba(0, 0, 0, 0.2);
+
+$color-text: #000; // texte / icônes inactifs
+$color-bg-card: #fff; // fond des cards
+$color-body: #111; // texte des cards
+$color-focus: #000; // anneau de focus
+$color-icon-active: #fff; // icône active (blanc)
+
+// =========================
+// Mixins utilitaires
+// =========================
+@mixin focus-ring($color: $color-focus, $width: 3px, $offset: 3px) {
+  &:focus-visible {
+    outline: $width solid $color;
+    outline-offset: $offset;
+  }
+}
+
+// =========================
+// Grille de dossiers
+// =========================
+.project-folders {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $gap;
+  margin: $gap 0 ($gap / 2);
+}
+
+// =========================
+// Boutons dossier
+// =========================
+.folder-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 12px;
+  border: none;
+  background: transparent;
+  color: $color-text;
+  border-radius: $radius;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 160ms ease, box-shadow 160ms ease, color 200ms ease;
+
+  // Icône (Font Awesome)
+  i {
+    font-size: 36px;
+    color: $color-text; // noir par défaut
+    transition: color 200ms ease;
+  }
+
+  // Survol / Hover
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-soft;
+  }
+
+  // Focus accessible
+  @include focus-ring();
+
+  // État actif (via classe ou ARIA)
+  &.active,
+  &[aria-expanded="true"] {
+    // le libellé peut rester noir si souhaité
+    // color: $color-icon-active; // si tu veux TOUT en blanc à l'actif, décommente
+
+    i {
+      color: $color-icon-active; // icône blanche quand sélectionné
+    }
+  }
+}
+
+// =========================
+// Conteneur des cartes
+// =========================
+.projects {
+  position: relative;
+  margin-top: ($gap / 2);
+  height: 100%;
+}
+
+// =========================
+// Cartes projet + animation
+// =========================
+.project-card {
+  color: $color-body;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+  box-shadow: $shadow-card;
+  transform: translateY(0);
+  transition: opacity 220ms ease, transform 220ms ease, height 220ms ease,
+    margin 220ms ease, padding 220ms ease;
+
+  // État caché contrôlé en JS : on garde display:block pour animer la hauteur
+  &[hidden] {
+    display: block;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+  }
+
+  // État visible (ajouté en JS)
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// =========================
+// Réduction des animations
+// =========================
+@media (prefers-reduced-motion: reduce) {
+  .folder-btn,
+  .project-card {
+    transition: none !important;
+  }
+}

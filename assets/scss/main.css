@@ -1,4 +1,72 @@
 @charset "UTF-8";
+.navbar {
+  position: relative;
+  display: flex;
+  gap: var(--gap);
+  padding: var(--pad);
+  border-radius: calc(var(--radius) + 6px);
+  background: var(--bg);
+}
+.navbar .projet {
+  border-top-left-radius: 12px;
+}
+.navbar .jeu {
+  border-top-right-radius: 12px;
+}
+
+/* Pilule animée sous l’onglet actif */
+.navbar::before {
+  content: "";
+  position: absolute;
+  top: var(--pad);
+  bottom: var(--pad);
+  left: var(--pad);
+  width: calc((100% - var(--gap) - 2 * var(--pad)) / 2); /* 2 boutons */
+  border-radius: var(--radius);
+  background: var(--pill);
+  z-index: 0;
+  transform: translateX(0%); /* position 1er bouton */
+  transition: transform 1000ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Quand le 2e bouton est actif, on décale la pilule */
+.navbar.second-active::before {
+  transform: translateX(calc(100% + var(--gap)));
+}
+
+/* Boutons */
+.navbar .btn {
+  position: relative;
+  z-index: 1; /* au-dessus de la pilule */
+  flex: 1 1 50%;
+  padding: 12px 16px;
+  border: none;
+  background: transparent; /* inactif : fond transparent */
+  color: var(--text); /* inactif : texte blanc */
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 220ms ease, -webkit-text-fill-color 220ms ease;
+}
+
+/* Actif : “écriture transparente” comme demandé */
+.navbar .btn[aria-selected=true] {
+  color: var(--sand-400);
+  background-color: white;
+}
+
+/* Focus visible accessible */
+.navbar .btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5333333333);
+  outline-offset: 2px;
+}
+
+/* Option : réduire les animations si l’utilisateur le demande */
+@media (prefers-reduced-motion: reduce) {
+  .navbar::before,
+  .navbar .btn {
+    transition: none;
+  }
+}
 :root {
   /* Palette proche de #dec099 */
   --sand-50: #f3e4cf;
@@ -73,6 +141,20 @@ h2 {
   /* Hover/active/focus pour un rendu premium */
   /* Accessibilité focus visible */
 }
+#hero-banner .hero-content-left .btn {
+  font-size: 40px;
+  font-family: "Tomorrow", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(4px) saturate(120%);
+  backdrop-filter: blur(4px) saturate(120%);
+  padding: 0.6em 1.2em;
+  border-radius: 12px;
+}
 #hero-banner .hero-content-left .btn:hover {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.35);
@@ -108,7 +190,6 @@ h2 {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.05);
   -webkit-backdrop-filter: blur(4px) saturate(120%);
   backdrop-filter: blur(4px) saturate(120%);
-  padding: 0.6em 1.2em;
   border-radius: 12px;
 }
 .layout .content_right {
@@ -120,7 +201,6 @@ h2 {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(255, 255, 255, 0.05);
   -webkit-backdrop-filter: blur(4px) saturate(120%);
   backdrop-filter: blur(4px) saturate(120%);
-  padding: 0.6em 1.2em;
   border-radius: 12px;
 }
 
@@ -144,4 +224,293 @@ h2 {
   width: 100%;
   height: 100%;
   z-index: -1; /* pour passer derrière le contenu */
+}
+
+.project-folders {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 16px 0 8px;
+}
+
+.folder-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 12px;
+  border: none;
+  background: transparent;
+  color: #000;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 160ms ease, box-shadow 160ms ease, color 200ms ease;
+}
+.folder-btn i {
+  font-size: 36px;
+  color: #000;
+  transition: color 200ms ease;
+}
+.folder-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.125);
+}
+.folder-btn:focus-visible {
+  outline: 3px solid #000;
+  outline-offset: 3px;
+}
+.folder-btn.active i, .folder-btn[aria-expanded=true] i {
+  color: #fff;
+}
+
+.projects {
+  position: relative;
+  margin-top: 8px;
+  height: 100%;
+}
+
+.project-card {
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  transition: opacity 220ms ease, transform 220ms ease, height 220ms ease, margin 220ms ease, padding 220ms ease;
+}
+.project-card[hidden] {
+  display: block;
+  height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+}
+.project-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .folder-btn,
+  .project-card {
+    transition: none !important;
+  }
+}
+.profile-card.pro {
+  color: #f7f7fb;
+  border-radius: 18px;
+  max-width: 720px;
+  /* --- Seul ajout structurel pour coller les boutons en bas --- */
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.profile-card.pro .pro__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.15);
+}
+.profile-card.pro .pro__id h2 {
+  margin: 0;
+  font-size: clamp(20px, 2.4vw, 24px);
+}
+.profile-card.pro .pro__role {
+  margin: 4px 0 6px;
+  color: white;
+  font-size: 14px;
+}
+.profile-card.pro .pro__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.profile-card.pro .pro__meta li {
+  color: rgb(231.25, 231.25, 237);
+}
+.profile-card.pro .pro__meta li strong {
+  color: #f7f7fb;
+}
+.profile-card.pro .pro__bio {
+  margin: 10px 0 12px;
+  color: rgb(234.4, 234.4, 239.8);
+  padding: 20px;
+}
+.profile-card.pro .pro__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 0 0 14px;
+  list-style: none;
+}
+.profile-card.pro .pro__chips li {
+  font-size: 13px;
+  color: #f7f7fb;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.profile-card.pro .skill-icons {
+  padding-left: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 8px 0 14px;
+  list-style: none;
+}
+.profile-card.pro .skill-icons li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(28px + 12px);
+  height: calc(28px + 12px);
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.profile-card.pro .skill-icons li:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+}
+.profile-card.pro .skill-icons li i {
+  font-size: 28px;
+  line-height: 1;
+  filter: brightness(0) invert(1);
+  transition: filter 0.15s ease, opacity 0.15s ease;
+}
+.profile-card.pro .skill-icons.--compact {
+  gap: 8px;
+}
+.profile-card.pro .skill-icons.--compact li {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+}
+.profile-card.pro .skill-icons.--compact li i {
+  font-size: 20px;
+}
+.profile-card.pro .pro__cta {
+  /* --- Cette marge pousse le bloc boutons au bas de la card --- */
+  margin-top: 15%;
+  height: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: white;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  font-size: 20px;
+}
+.profile-card.pro .pro__cta .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.profile-card.pro .pro__cta .btn.--primary {
+  border-color: transparent;
+  color: var(--sand-400);
+}
+.profile-card.pro .pro__cta .btn.--primary:hover {
+  transform: translateY(-1px);
+}
+.profile-card.pro .pro__cta .btn.--ghost {
+  background: transparent;
+  color: var(--sand-400);
+}
+.profile-card.pro .pro__cta .btn.--ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 1px, 1px);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-card,
+  .btn,
+  .skill-icons li {
+    transition: none !important;
+  }
+}
+/* Couleur dispo */
+/* Badge de statut */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  line-height: 1;
+}
+.status.--online {
+  color: #22c55e;
+}
+.status.--online .dot {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.18) inset;
+  /* halo respirant */
+}
+.status.--online .dot::after {
+  content: "";
+  position: absolute;
+  inset: -6px; /* taille du halo */
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.35);
+  animation: pulse 1.8s ease-out infinite;
+}
+
+/* Animation “breathing” */
+@keyframes pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  60% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+/* Respect de la préférence utilisateur */
+@media (prefers-reduced-motion: reduce) {
+  .status .dot::after {
+    animation: none;
+  }
 }/*# sourceMappingURL=main.css.map */

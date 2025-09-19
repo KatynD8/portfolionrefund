@@ -1,0 +1,272 @@
+// ===== Profile Card — Detailed =====
+$bg: #0b0c10;
+$fg: #f7f7fb;
+$muted: #b8b8c3;
+$line: rgba(255, 255, 255, 0.08);
+$accent: #7c3aed; // violet
+$radius: 18px;
+$shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+
+.profile-card.pro {
+  color: $fg;
+  border-radius: $radius;
+
+  max-width: 720px;
+
+  /* --- Seul ajout structurel pour coller les boutons en bas --- */
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .pro__head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-bottom: 12px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .pro__id h2 {
+    margin: 0;
+    font-size: clamp(20px, 2.4vw, 24px);
+  }
+
+  .pro__role {
+    margin: 4px 0 6px;
+    color: white;
+    font-size: 14px;
+  }
+
+  .pro__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    li {
+      color: mix($fg, $muted, 75%);
+      strong {
+        color: $fg;
+      }
+    }
+  }
+
+  .pro__bio {
+    margin: 10px 0 12px;
+    color: mix($fg, $muted, 80%);
+    padding: 20px;
+  }
+
+  .pro__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    margin: 0 0 14px;
+    list-style: none;
+
+    li {
+      font-size: 13px;
+      color: $fg;
+      border: 1px dashed $line;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+
+  // =========================
+  // SKILL ICONS (Devicon)
+  // =========================
+  .skill-icons {
+    $icon-size: 28px;
+
+    padding-left: 20px;
+
+    display: flex;
+
+    flex-wrap: wrap;
+    gap: 10px 14px;
+
+    margin: 8px 0 14px;
+    list-style: none;
+
+    li {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: calc(#{$icon-size} + 12px);
+      height: calc(#{$icon-size} + 12px);
+      border-radius: 12px;
+      border: 1px dashed $line;
+      background: rgba(255, 255, 255, 0.04);
+      transition: transform 0.15s ease, box-shadow 0.15s ease,
+        border-color 0.15s ease, background-color 0.15s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        border-color: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      i {
+        font-size: $icon-size;
+        line-height: 1;
+        // monochrome blanc (look pro sur fond sombre)
+        filter: brightness(0) invert(1);
+        transition: filter 0.15s ease, opacity 0.15s ease;
+      }
+
+      // Variante hover teintée (optionnelle) :
+      // &:hover i { filter: none; color: $accent; }
+    }
+
+    // Version compacte (petits ronds)
+    &.--compact {
+      gap: 8px;
+      li {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+
+        i {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  .pro__cta {
+    /* --- Cette marge pousse le bloc boutons au bas de la card --- */
+    margin-top: 15%;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: white;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    font-size: 20px;
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid $line;
+      transition: transform 0.15s ease, box-shadow 0.15s ease,
+        background-color 0.15s ease, color 0.15s ease;
+
+      &.--primary {
+        border-color: transparent;
+        color: var(--sand-400);
+
+        &:hover {
+          transform: translateY(-1px);
+        }
+      }
+
+      &.--ghost {
+        background: transparent;
+        color: var(--sand-400);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.06);
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+}
+
+// Visually-hidden util (pour annoncer les labels aux lecteurs d’écran)
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 1px, 1px);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Motion-safe
+@media (prefers-reduced-motion: reduce) {
+  .profile-card,
+  .btn,
+  .skill-icons li {
+    transition: none !important;
+  }
+}
+
+// ===== Navbar with animated pill =====
+/* Couleur dispo */
+$ok: #22c55e; // vert
+
+/* Badge de statut */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  line-height: 1;
+
+  &.--online {
+    color: $ok;
+
+    .dot {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: $ok;
+      box-shadow: 0 0 0 2px rgba($ok, 0.18) inset;
+
+      /* halo respirant */
+      &::after {
+        content: "";
+        position: absolute;
+        inset: -6px; /* taille du halo */
+        border-radius: 50%;
+        background: rgba($ok, 0.35);
+        animation: pulse 1.8s ease-out infinite;
+      }
+    }
+  }
+}
+
+/* Animation “breathing” */
+@keyframes pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  60% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+/* Respect de la préférence utilisateur */
+@media (prefers-reduced-motion: reduce) {
+  .status .dot::after {
+    animation: none;
+  }
+}
