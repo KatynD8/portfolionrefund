@@ -1,14 +1,14 @@
 #hero-banner {
   height: 95vh;
   position: relative; // <- pour ancrer les enfants positionnés
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid white;
 
   .top-bar {
     display: flex;
     flex-direction: row;
     gap: 50px;
     align-items: center; // centre verticalement les éléments de la barre
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid white;
   }
 
   .hero-content-right {
