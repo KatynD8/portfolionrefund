@@ -1,9 +1,30 @@
 .background {
-  position: fixed; /* fixé en arrière-plan */
+  position: fixed;
   display: block;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* pour passer derrière le contenu */
+  z-index: -1;
+
+  opacity: 0; /* invisible au départ */
+  animation: bg-fade-in 8.5s ease-out forwards; /* 5–6s */
+  will-change: opacity;
+}
+
+@keyframes bg-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Accessibilité : pas d’anim pour ceux qui la réduisent */
+@media (prefers-reduced-motion: reduce) {
+  .background {
+    animation: none;
+    opacity: 1;
+  }
 }

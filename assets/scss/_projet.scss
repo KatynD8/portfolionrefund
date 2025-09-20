@@ -1,20 +1,33 @@
-// =========================
+// =====================================================
+// Design System — Portfolio Projets (réécriture complète)
+// =====================================================
+
+// -------------------------
 // Variables
-// =========================
+// -------------------------
 $gap: 16px;
 $radius: 14px;
+$radius-sm: 10px;
 $shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.125);
 $shadow-card: 0 6px 24px rgba(0, 0, 0, 0.2);
 
-$color-text: #000; // texte / icônes inactifs
-$color-bg-card: #fff; // fond des cards
-$color-body: #111; // texte des cards
+$color-text: #000; // texte global / icônes inactifs
+$color-body: #111; // texte dans les cartes/documents
+$color-muted: rgba(0, 0, 0, 0.6);
+$color-border: rgba(0, 0, 0, 0.08);
+$color-border-strong: rgba(0, 0, 0, 0.12);
+
+$color-bg-card: #fff; // fond “document”
+$color-bg-muted: rgba(0, 0, 0, 0.02);
+
 $color-focus: #000; // anneau de focus
 $color-icon-active: #fff; // icône active (blanc)
+$color-badge-wip: #fff3c4; // statut “en cours”
+$color-badge-done: #d1fadf; // statut “terminé”
 
-// =========================
+// -------------------------
 // Mixins utilitaires
-// =========================
+// -------------------------
 @mixin focus-ring($color: $color-focus, $width: 3px, $offset: 3px) {
   &:focus-visible {
     outline: $width solid $color;
@@ -22,19 +35,31 @@ $color-icon-active: #fff; // icône active (blanc)
   }
 }
 
-// =========================
-// Grille de dossiers
-// =========================
+@mixin truncate($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// -------------------------
+// Grille de dossiers (sélecteur de catégorie/projet)
+// -------------------------
 .project-folders {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: $gap;
   margin: $gap 0 ($gap / 2);
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-// =========================
-// Boutons dossier
-// =========================
+// Boutons “dossier”
 .folder-btn {
   display: flex;
   flex-direction: column;
@@ -49,58 +74,57 @@ $color-icon-active: #fff; // icône active (blanc)
   font-weight: 600;
   transition: transform 160ms ease, box-shadow 160ms ease, color 200ms ease;
 
-  // Icône (Font Awesome)
   i {
     font-size: 36px;
     color: $color-text; // noir par défaut
     transition: color 200ms ease;
   }
 
-  // Survol / Hover
   &:hover {
     transform: translateY(-2px);
     box-shadow: $shadow-soft;
   }
 
-  // Focus accessible
   @include focus-ring();
 
-  // État actif (via classe ou ARIA)
+  // État actif (classe ou ARIA)
   &.active,
   &[aria-expanded="true"] {
-    // le libellé peut rester noir si souhaité
-    // color: $color-icon-active; // si tu veux TOUT en blanc à l'actif, décommente
-
     i {
-      color: $color-icon-active; // icône blanche quand sélectionné
-    }
+      color: $color-icon-active;
+    } // icône blanche quand sélectionné
+    // color: $color-icon-active; // décommente si tu veux aussi le libellé en blanc
   }
 }
 
-// =========================
+// -------------------------
 // Conteneur des cartes
-// =========================
+// -------------------------
 .projects {
   position: relative;
   margin-top: ($gap / 2);
   height: 100%;
+  padding: 8px 0; // gouttière autour du document
 }
 
-// =========================
-// Cartes projet + animation
-// =========================
+// -------------------------
+// Carte Projet — Base (document style)
+// -------------------------
 .project-card {
   color: $color-body;
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 16px;
+
+  border-radius: $radius;
   box-shadow: $shadow-card;
+  border: 1px solid $color-border;
   transform: translateY(0);
   transition: opacity 220ms ease, transform 220ms ease, height 220ms ease,
     margin 220ms ease, padding 220ms ease;
 
-  // État caché contrôlé en JS : on garde display:block pour animer la hauteur
+  // État caché (gardé en flow pour animer la hauteur)
   &[hidden] {
     display: block;
     height: 0;
@@ -110,19 +134,222 @@ $color-icon-active: #fff; // icône active (blanc)
     opacity: 0;
   }
 
-  // État visible (ajouté en JS)
+  // État visible
   &.show {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-// =========================
+// -------------------------
+// Variante “Document Informatique”
+// -------------------------
+.project-doc {
+  // largeur lisible & grille document (fiche à gauche, contenu à droite)
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 28px;
+  line-height: 1.6;
+
+  display: grid;
+  grid-template-columns: 260px 1fr; // colonne méta + contenu
+  grid-template-areas:
+    "header header"
+    "aside  body";
+  column-gap: 28px;
+  row-gap: 18px;
+
+  // En-tête
+  .doc-header {
+    grid-area: header;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $color-border;
+
+    .doc-title {
+      margin: 0;
+      font-size: 1.6rem;
+      line-height: 1.2;
+    }
+
+    .doc-status {
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid $color-border-strong;
+      background: $color-badge-wip; // changer en $color-badge-done si terminé
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+  }
+
+  // Colonne méta (fiche)
+  .doc-aside {
+    grid-area: aside;
+    align-self: start;
+    position: sticky;
+    top: 24px; // reste visible au scroll
+    padding: 12px;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    background: $color-bg-muted;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+
+      .bullets {
+        display: none;
+      }
+    }
+
+    li {
+      display: grid;
+      list-style: none;
+      grid-template-columns: 90px 1fr;
+      column-gap: 8px;
+      align-items: baseline;
+
+      strong {
+        color: $color-muted;
+      }
+    }
+
+    a {
+      color: inherit;
+      text-underline-offset: 0.2em;
+      @include focus-ring();
+    }
+  }
+
+  // Corps du document
+  .doc-body {
+    grid-area: body;
+    display: grid;
+    gap: 18px;
+  }
+
+  .doc-section {
+    background: #fff;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    padding: 14px;
+
+    h4 {
+      margin: 0 0 0.4rem;
+      font-size: 1.05rem;
+      letter-spacing: 0.2px;
+    }
+
+    p {
+      margin: 0 0 0.6rem;
+    }
+    ul {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+  }
+
+  // Petites métas (en pied)
+  .doc-meta {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: $color-muted;
+  }
+}
+
+// -------------------------
+// Statuts (utilitaires)
+// -------------------------
+.status {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid $color-border-strong;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: $color-badge-wip;
+
+  &--done {
+    background: $color-badge-done;
+  }
+}
+
+// -------------------------
+// Liens d’action
+// -------------------------
+.link,
+a.link {
+  color: inherit;
+  text-underline-offset: 0.2em;
+  transition: opacity 160ms ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+  @include focus-ring();
+}
+
+// -------------------------
+// Réactivité
+// -------------------------
+@media (max-width: 1024px) {
+  .project-doc {
+    max-width: 860px;
+  }
+}
+
+@media (max-width: 900px) {
+  .project-doc {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "aside"
+      "body";
+
+    .doc-aside {
+      position: static;
+    }
+  }
+}
+
+@media (max-width: 560px) {
+  .project-doc {
+    padding: 20px;
+
+    .doc-header .doc-title {
+      font-size: 1.35rem;
+    }
+  }
+}
+
+// -------------------------
 // Réduction des animations
-// =========================
+// -------------------------
 @media (prefers-reduced-motion: reduce) {
   .folder-btn,
   .project-card {
     transition: none !important;
+  }
+}
+
+// -------------------------
+// Impression (propre)
+// -------------------------
+@media print {
+  .project-folders {
+    display: none !important;
+  }
+  .project-card {
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  .project-doc {
+    break-inside: avoid;
   }
 }

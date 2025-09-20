@@ -1,11 +1,16 @@
+/* ===================================================
+   Hero + Glitch (réécriture complète, effet violent)
+   =================================================== */
+
 /* ========= Variables ========= */
 $border-color: #fff;
 $border-width: 2px;
 $slide-duration: 1800ms;
 $hero-delay: 120ms; /* démarre un peu avant */
 $topbar-delay: 260ms; /* léger décalage après */
+$glitch-duration: 4s; /* 4–6s recommandé */
 
-/* ========= Animations ========= */
+/* ========= Animations bordures ========= */
 @keyframes slide-in-from-left {
   from {
     transform: translateX(-100%);
@@ -23,23 +28,228 @@ $topbar-delay: 260ms; /* léger décalage après */
   }
 }
 
+/* ========= Glitch: defs globales ========= */
+@property --dx {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* Saccades franches (steps + gros sauts) */
+@keyframes glitch-jitter-violent {
+  0% {
+    transform: translate(0, 0) skewX(0) scale(1);
+  }
+  6% {
+    transform: translate(6px, -2px) skewX(-4deg) scale(1.01);
+  }
+  12% {
+    transform: translate(-10px, 3px) skewX(6deg) scale(0.99);
+  }
+  18% {
+    transform: translate(4px, -6px) skewX(-3deg) scale(1.02);
+  }
+  28% {
+    transform: translate(-8px, 2px) skewX(8deg) scale(0.98);
+  }
+  38% {
+    transform: translate(12px, -4px) skewX(-10deg) scale(1.03);
+  }
+  52% {
+    transform: translate(-6px, 6px) skewX(5deg) scale(0.985);
+  }
+  64% {
+    transform: translate(8px, -3px) skewX(-6deg) scale(1.015);
+  }
+  78% {
+    transform: translate(-12px, 0) skewX(9deg) scale(0.98);
+  }
+  90% {
+    transform: translate(3px, -2px) skewX(-3deg) scale(1);
+  }
+  100% {
+    transform: translate(0, 0) skewX(0) scale(1);
+  }
+}
+
+/* Forts décalages RVB */
+@keyframes chroma-shift-violent {
+  0% {
+    --dx: 0px;
+  }
+  6% {
+    --dx: 3px;
+  }
+  12% {
+    --dx: 6px;
+  }
+  18% {
+    --dx: 1px;
+  }
+  28% {
+    --dx: 4px;
+  }
+  38% {
+    --dx: 8px;
+  }
+  52% {
+    --dx: 2px;
+  }
+  64% {
+    --dx: 5px;
+  }
+  78% {
+    --dx: 7px;
+  }
+  90% {
+    --dx: 1px;
+  }
+  100% {
+    --dx: 0px;
+  }
+}
+
+/* Flashs agressifs (blackouts) */
+@keyframes glitch-flicker-violent {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  7%,
+  7.6% {
+    opacity: 0;
+  }
+  14%,
+  14.8% {
+    opacity: 0.25;
+  }
+  22%,
+  22.4% {
+    opacity: 0;
+  }
+  31%,
+  31.4% {
+    opacity: 0.35;
+  }
+  39%,
+  39.2% {
+    opacity: 0;
+  }
+  48%,
+  48.5% {
+    opacity: 0.2;
+  }
+  57%,
+  57.3% {
+    opacity: 0;
+  }
+  72%,
+  72.6% {
+    opacity: 0.3;
+  }
+  86%,
+  86.3% {
+    opacity: 0;
+  }
+}
+
+/* Spikes de couleur/contraste */
+@keyframes glitch-fx-violent {
+  0% {
+    filter: drop-shadow(var(--dx) 0 0 #ff004c)
+      drop-shadow(calc(-1 * var(--dx)) 0 0 #00fff0) contrast(100%)
+      saturate(100%) hue-rotate(0deg);
+  }
+  10% {
+    filter: drop-shadow(var(--dx) 0 0 #ff004c)
+      drop-shadow(calc(-1 * var(--dx)) 0 0 #00fff0) contrast(160%)
+      saturate(180%) hue-rotate(15deg);
+  }
+  20% {
+    filter: drop-shadow(var(--dx) 0 0 #ff004c)
+      drop-shadow(calc(-1 * var(--dx)) 0 0 #00fff0) invert(1) contrast(120%);
+  }
+  35% {
+    filter: drop-shadow(var(--dx) 0 0 #ff004c)
+      drop-shadow(calc(-1 * var(--dx)) 0 0 #00fff0) contrast(200%)
+      saturate(220%) hue-rotate(-20deg);
+  }
+  55% {
+    filter: drop-shadow(var(--dx) 0 0 #ff004c)
+      drop-shadow(calc(-1 * var(--dx)) 0 0 #00fff0) contrast(140%)
+      saturate(160%) hue-rotate(25deg);
+  }
+  70% {
+    filter: drop-shadow(var(--dx) 0 0 #ff004c)
+      drop-shadow(calc(-1 * var(--dx)) 0 0 #00fff0) invert(1) contrast(130%);
+  }
+  85% {
+    filter: drop-shadow(var(--dx) 0 0 #ff004c)
+      drop-shadow(calc(-1 * var(--dx)) 0 0 #00fff0) contrast(220%)
+      saturate(240%) hue-rotate(-30deg);
+  }
+  100% {
+    filter: none;
+  }
+}
+
+/* Découpes nettes (barres horizontales) */
+@keyframes glitch-clip-violent {
+  0% {
+    clip-path: inset(0 0 0 0);
+  }
+  8% {
+    clip-path: inset(20% 0 0 0);
+  }
+  9% {
+    clip-path: inset(0 0 65% 0);
+  }
+  14% {
+    clip-path: inset(35% 0 0 0);
+  }
+  20% {
+    clip-path: inset(0 0 40% 0);
+  }
+  28% {
+    clip-path: inset(60% 0 0 0);
+  }
+  38% {
+    clip-path: inset(0 0 72% 0);
+  }
+  48% {
+    clip-path: inset(10% 0 0 0);
+  }
+  58% {
+    clip-path: inset(0 0 55% 0);
+  }
+  70% {
+    clip-path: inset(45% 0 0 0);
+  }
+  82% {
+    clip-path: inset(0 0 30% 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
 /* ========= Hero Banner ========= */
 #hero-banner {
   height: 95vh;
   position: relative;
-  overflow: hidden; /* masque ce qui dépasse pendant l’anim */
-  border-bottom: $border-width solid transparent; /* on remplace la bordure par une ligne animée */
+  overflow: hidden;
+  border-bottom: $border-width solid transparent;
 
-  /* Ligne "bordure" — démarre hors-écran à gauche, glisse vers la position */
+  /* Ligne animée (bas du hero) */
   &::after {
     content: "";
     position: absolute;
     bottom: 0;
-    left: 0; /* s’aligne à gauche au final */
+    left: 0;
     width: 100%;
     height: $border-width;
     background: $border-color;
-    transform: translateX(-100%); /* totalement hors-écran à gauche */
+    transform: translateX(-100%);
     animation: slide-in-from-left $slide-duration ease-out $hero-delay forwards;
     will-change: transform;
   }
@@ -47,34 +257,31 @@ $topbar-delay: 260ms; /* léger décalage après */
   .top-bar {
     position: relative;
     display: flex;
-    flex-direction: row;
     gap: 50px;
     align-items: center;
-    border-bottom: $border-width solid transparent; /* remplacée par la ligne animée */
+    border-bottom: $border-width solid transparent;
 
-    /* Ligne "bordure" — démarre hors-écran à droite, glisse vers la position */
+    /* Ligne animée (sous la top-bar) */
     &::after {
       content: "";
       position: absolute;
-      bottom: -$border-width; /* à l’endroit visuel de l’ancienne bordure */
+      bottom: -$border-width;
       left: 0;
       width: 100%;
       height: $border-width;
       background: $border-color;
-      transform: translateX(100%); /* totalement hors-écran à droite */
+      transform: translateX(100%);
       animation: slide-in-from-right $slide-duration ease-out $topbar-delay
         forwards;
       will-change: transform;
     }
   }
 
-  /* ========= Contenus existants (inchangés) ========= */
   .hero-content-right {
     position: absolute;
     bottom: 0;
     right: 0;
     display: flex;
-    flex-direction: row;
     width: 40vh;
     height: 50vh;
 
@@ -83,6 +290,20 @@ $topbar-delay: 260ms; /* léger décalage après */
       height: 100%;
       object-fit: cover;
       display: block;
+
+      /* Effet GLITCH VIOLENT (sur .glitch) */
+      &.glitch {
+        --r: #ff004c; /* rouge/magenta */
+        --c: #00fff0; /* cyan */
+
+        animation: glitch-jitter-violent $glitch-duration steps(18, end) 1 both,
+          glitch-flicker-violent $glitch-duration linear 1 both,
+          chroma-shift-violent $glitch-duration steps(12, end) 1 both,
+          glitch-clip-violent $glitch-duration steps(20, end) 1 both,
+          glitch-fx-violent $glitch-duration linear 1 both;
+
+        will-change: transform, opacity, filter, clip-path;
+      }
     }
   }
 
@@ -116,26 +337,33 @@ $topbar-delay: 260ms; /* léger décalage après */
       display: inline-flex;
       align-items: center;
       justify-content: center;
-    }
 
-    .btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.35);
-      transform: translateY(-2px);
-      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.35);
+        transform: translateY(-2px);
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      }
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      }
+      &:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.9);
+        outline-offset: 3px;
+        border-color: rgba(255, 255, 255, 0.6);
+      }
     }
+  }
+}
 
-    .btn:active {
-      transform: translateY(0);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    }
-
-    .btn:focus-visible {
-      outline: 2px solid rgba(255, 255, 255, 0.9);
-      outline-offset: 3px;
-      border-color: rgba(255, 255, 255, 0.6);
-    }
+/* ========= Accessibilité ========= */
+@media (prefers-reduced-motion: reduce) {
+  #hero-banner .hero-content-right img.glitch {
+    animation: none;
+    filter: none;
+    clip-path: none;
   }
 }
